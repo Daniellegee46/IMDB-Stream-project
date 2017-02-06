@@ -1,31 +1,34 @@
 
 //import java.awt.List;
+import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
+
 
 public class IMDBDirectors {
 
 	public static long countMovies(Path file) {
 
-		//long count = 0;
-		long count = file.getNameCount();
+		String contents = null;
 		
+		try {
+			contents = new String(Files.readAllBytes(Paths.get(file.toUri())), StandardCharsets.UTF_8);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} // Read file into string
+		
+		//List<String> words = Arrays.asList(contents.split("\\t"));
+		//words.SortBy.MOVIE;
+		Stream<String> stream = Stream.of(contents.split("\t"));
+		long count = stream.count();
 		return count;
-		/*Book
-		 * Path path = Paths.get("."); 
-		 * try { 
-		 * 		Stream<Path> list = Files.list(path); 
-		 * 		list.forEach(System.out::println); 
-		 * } catch
-		 * 		(IOException ex) { ex.printStackTrace();
-		 *  }
-		 *}
-		 * 
-		 */
+
 	}
 
 	public static long countDirectors(Path file) {
@@ -70,6 +73,6 @@ public class IMDBDirectors {
 
 	public static void main(String[] args) {
 
-		//countMovies("directors.csv");
+		//countMovies(../Assignment1\directors.csv);
 	}
 }

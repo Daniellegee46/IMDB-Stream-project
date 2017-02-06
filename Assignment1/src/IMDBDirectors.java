@@ -57,15 +57,15 @@ public class IMDBDirectors {
 		}
 		List<String> lines = breader.lines().collect(Collectors.toList());
 		
-		List<String> docMovies=lines.stream()
+		List<String> dMovies=lines.stream()
 				   .map(line -> Arrays.asList(line.split("\t")))	
 				   .filter(list -> {String name=list.get(0); 
 			                  return name.equalsIgnoreCase(last);})
-				   .map(movie -> {String movieName=movie.get(sort.ordinal()); 
+				   .map(movie -> {String movieName=movie.get(2); 
 	                               return movieName;})
 				   .collect(Collectors.toList());
-	System.out.println(docMovies);
-	return docMovies;
+	System.out.println(dMovies);
+	return dMovies;
 	
 	}
 

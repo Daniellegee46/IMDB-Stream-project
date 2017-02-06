@@ -1,44 +1,72 @@
 
 //import java.awt.List;
-import java.io.File;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 
 public class IMDBDirectors {
 
 	public static long countMovies(Path file) {
-
-		String contents = null;
-		
+		long count = 0;
 		try {
-			contents = new String(Files.readAllBytes(Paths.get(file.toUri())), StandardCharsets.UTF_8);
+			count = Files.lines(file, Charset.forName("ISO-8859-1")).count();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} // Read file into string
-		
-		//List<String> words = Arrays.asList(contents.split("\\t"));
-		//words.SortBy.MOVIE;
-		Stream<String> stream = Stream.of(contents.split("\t"));
-		long count = stream.count();
+		}
 		return count;
-
 	}
 
 	public static long countDirectors(Path file) {
-		return 0;
+		BufferedReader breader = null;
+		try {
+			breader = Files.newBufferedReader(file, StandardCharsets.ISO_8859_1);
+		} catch (IOException e) {
+			System.out.println("error");
+		}
+		List<String> lines = breader.lines().collect(Collectors.toList());
+		long directors = lines.stream()
+				.map(line -> Arrays.asList(line.split("\t")))
+				.map(list -> list.subList(0, 2))
+				.distinct().count();
+		return directors;
+		// List<String> directorNames = lines.stream()
+		// .map(line -> Arrays.asList(line.split("\t")))
+		// .map(list -> list.subList(0, 2))
+		// .map(list -> list.toString())
+		// .collect(Collectors.toList());
+		//
+		// System.out.println(directorNames);
 
 	}
 
 	public static List<String> getMoviesOfDirector(Path file, String last, String first, SortBy sort) {
-		return null;
-
+		BufferedReader breader = null;
+		try {
+			breader = Files.newBufferedReader(file, StandardCharsets.ISO_8859_1);
+		} catch (IOException e) {
+			System.out.println("error");
+		}
+		List<String> lines = breader.lines().collect(Collectors.toList());
+		
+		List<String> docMovies=lines.stream()
+				   .map(line -> Arrays.asList(line.split("\t")))	
+				   .filter(list -> {String name=list.get(0); 
+			                  return name.equalsIgnoreCase(last);})
+				   .map(movie -> {String movieName=movie.get(sort.ordinal()); 
+	                               return movieName;})
+				   .collect(Collectors.toList());
+	System.out.println(docMovies);
+	return docMovies;
+	
 	}
 
 	public static List<String> getMoviesInYear(Path file, int year, SortBy sort) {
@@ -73,6 +101,15 @@ public class IMDBDirectors {
 
 	public static void main(String[] args) {
 
-		//countMovies(../Assignment1\directors.csv);
+		// countMovies(../Assignment1\directors.csv);
 	}
 }
+
+// Print Helper
+//
+//
+// List<String> directorNames = lines.stream()
+// .map(line -> Arrays.asList(line.split("\t")).get(0))
+// .collect(Collectors.toList());
+//
+// System.out.println(directorNames);

@@ -57,19 +57,79 @@ public class IMDBDirectors {
 		}
 		List<String> lines = breader.lines().collect(Collectors.toList());
 		
-		List<String> dMovies=lines.stream()
-				   .map(line -> Arrays.asList(line.split("\t")))	
-				   .filter(list -> {String name=list.get(0); 
-			                  return name.equalsIgnoreCase(last);})
-				   .map(movie -> {String movieName=movie.get(2); 
-	                               return movieName;})
-				   .collect(Collectors.toList());
-	System.out.println(dMovies);
-	return dMovies;
-	
+		if(sort == SortBy.FIRSTNAME){
+			List<String> dMovies=lines.stream()
+					   .map(line -> Arrays.asList(line.split("\t")))	
+					   .filter(list -> {String name=list.get(0); 
+				                  return name.equalsIgnoreCase(last);})
+					   .filter(list -> {String fname = list.get(1);
+					   return fname.equalsIgnoreCase(first);})
+					   .sorted((n1, n2) -> n1.get(1).compareToIgnoreCase(n2.get(1)))					   
+//					   .map(movie -> {String movieName=movie.get(sort.ordinal()); 
+//		                               return movieName;})
+					   .map(list -> list.toString().replace("[", "").replace("]", "").replace(", ","\t"))
+					   .collect(Collectors.toList());
+			System.out.println(dMovies);
+
+			return dMovies;
+		}
+		if(sort == SortBy.LASTNAME){
+			List<String> dMovies=lines.stream()
+					   .map(line -> Arrays.asList(line.split("\t")))	
+					   .filter(list -> {String name=list.get(0); 
+				                  return name.equalsIgnoreCase(last);})
+					   .filter(list -> {String fname = list.get(1);
+					   return fname.equalsIgnoreCase(first);})
+					   .sorted((n1, n2) -> n1.get(0).compareToIgnoreCase(n2.get(0)))					   
+//					   .map(movie -> {String movieName=movie.get(2); 
+//		                               return movieName;})
+					   .map(list -> list.toString().replace("[", "").replace("]", "").replace(", ","\t"))
+					   .collect(Collectors.toList());
+			System.out.println(dMovies);
+
+			return dMovies;
+		}
+		if(sort == SortBy.MOVIE){
+			List<String> dMovies=lines.stream()
+					   .map(line -> Arrays.asList(line.split("\t")))	
+					   .filter(list -> {String name=list.get(0); 
+				                  return name.equalsIgnoreCase(last);})
+					   .filter(list -> {String fname = list.get(1);
+					   return fname.equalsIgnoreCase(first);})
+					   .sorted((n1, n2) -> n1.get(2).compareToIgnoreCase(n2.get(2)))					   
+//					   .map(movie -> {String movieName=movie.get(2); 
+//		                               return movieName;})
+					   .map(list -> list.toString().replace("[", "").replace("]", "").replace(", ","\t"))
+					   .collect(Collectors.toList());
+				
+			System.out.println(dMovies);
+
+			return dMovies;
+		}
+		if(sort == SortBy.YEAR){
+			List<String> dMovies=lines.stream()
+					   .map(line -> Arrays.asList(line.split("\t")))	
+					   .filter(list -> {String name=list.get(0); 
+				                  return name.equalsIgnoreCase(last);})
+					   .filter(list -> {String fname = list.get(1);
+					   return fname.equalsIgnoreCase(first);})
+					   .sorted((n1, n2) -> n1.get(3).compareToIgnoreCase(n2.get(3)))					   
+//					   .map(movie -> {String movieName=movie.get(2); 
+//		                               return movieName;})
+					   .map(list -> list.toString().replace("[", "").replace("]", "").replace(", ","\t"))
+					   .collect(Collectors.toList());
+			System.out.println(dMovies);
+
+			return dMovies;
+		}
+
+	return null;
+	//return dMovies.SortBy.sort;
+
 	}
 
 	public static List<String> getMoviesInYear(Path file, int year, SortBy sort) {
+		
 		return null;
 
 	}
@@ -99,10 +159,6 @@ public class IMDBDirectors {
 
 	}
 
-	public static void main(String[] args) {
-
-		// countMovies(../Assignment1\directors.csv);
-	}
 }
 
 // Print Helper

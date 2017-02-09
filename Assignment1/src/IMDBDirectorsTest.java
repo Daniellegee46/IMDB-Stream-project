@@ -1,3 +1,5 @@
+
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -363,7 +365,8 @@ public class IMDBDirectorsTest {
 				"Cloud Atlas	3",
 				"Contact	1",
 				"Cowboys & Aliens	1",
-				"Crash	2",
+				"Crash	1",
+				"Crash	1",
 				"Deep Impact	1",
 				"Diary of a Wimpy Kid	1",
 				"Die Another Day	1",
@@ -385,7 +388,8 @@ public class IMDBDirectorsTest {
 				"Freaky Friday	1",
 				"Fury	1",
 				"Get Smart	1",
-				"Ghostbusters	2",
+				"Ghostbusters	1",
+				"Ghostbusters	1",
 				"Ghostbusters II	1",
 				"Glory	1",
 				"Good Night, and Good Luck.	1",
@@ -621,9 +625,7 @@ public class IMDBDirectorsTest {
 				"Cloud Atlas	3",
 				"Captain America: Civil War	2",
 				"Captain America: The Winter Soldier	2",
-				"Crash	2",
 				"Dumb and Dumber To	2",
-				"Ghostbusters	2",
 				"Hail, Caesar!	2",
 				"Machete	2",
 				"No Country for Old Men	2",
@@ -688,6 +690,8 @@ public class IMDBDirectorsTest {
 				"Close Encounters of the Third Kind	1",
 				"Contact	1",
 				"Cowboys & Aliens	1",
+				"Crash	1",
+				"Crash	1",
 				"Deep Impact	1",
 				"Diary of a Wimpy Kid	1",
 				"Die Another Day	1",
@@ -708,6 +712,8 @@ public class IMDBDirectorsTest {
 				"Freaky Friday	1",
 				"Fury	1",
 				"Get Smart	1",
+				"Ghostbusters	1",
+				"Ghostbusters	1",
 				"Ghostbusters II	1",
 				"Glory	1",
 				"Good Night, and Good Luck.	1",

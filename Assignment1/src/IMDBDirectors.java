@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class IMDBDirectors {
@@ -199,26 +200,19 @@ public class IMDBDirectors {
 		try {
 			lines = Files.lines(file, Charset.forName("ISO-8859-1")).collect(Collectors.toList());
 			
-			Map<String, Long> mdCount = lines.stream().map(line -> Arrays.asList(line.split("\t")))
-					.collect(Collectors.groupingBy(n -> n.get(0), Collectors.counting()));
-			
-					
-			//get just first names and last names key set
-			
-			//use these as keys 
-			//get key with highest values 
-						    List<String> result = mdCount.entrySet().stream()
-						            .sorted(Comparator.comparing(Map.Entry::getValue))
-						            .map(Map.Entry::getKey)
-						            .filter(list -> mdCount.keySet(list))
-						            .map(list -> {list.toString();
-//						            .map(list -> {list.toString();
-								String yearMovies = String.format("%s\t%s\t%s\t%s", list.get(0), list.get(1), mdCount.values());
-									return yearMovies;})
-						            .collect(Collectors.toList());
+			Map<Object, Long> mdCount = lines.stream().map(line -> Arrays.asList(line.split("\t")))
+					.collect(Collectors.groupingBy(n -> String.format("%s\t%s", n.get(0), n.get(1)), Collectors.counting()));
+				
+						    String result = mdCount.entrySet().stream()
+						             .max(Comparator.comparing(n -> n.getValue()))
+							            .map(list -> list.getKey().toString()+"\t"+ list.getValue().toString()).get();
+
+
+						    List<String> realResult = Arrays.asList(result);
 						    
-				//System.out.println(mdCount);
-				return result;
+						    
+			//	System.out.println(realResult);
+				return realResult;
 		}
 			catch (IOException e) {
 				e.printStackTrace();		
@@ -234,50 +228,38 @@ public class IMDBDirectors {
 			lines = Files.lines(file, Charset.forName("ISO-8859-1")).collect(Collectors.toList());
 			
 			if(sortByLastname){
-//				List<String> dMovies = lines.stream()
-//						.map(line -> Arrays.asList(line.split("\t")))	
-//				  .filter(amovie -> {String movieName=amovie.get(2); 
-//				                    return movieName.equalsIgnoreCase(movie);})
-//				  .forEach(list -> {String director=list.get(0);
-//				  director.});
-				
+
 				List<String> dMovies = lines.stream()
 						   .map(line -> Arrays.asList(line.split("\t")))
-						   .distinct()
-						   
 						   .filter(list -> {String name=list.get(2); 
 					                  return name.equalsIgnoreCase(movie);})
-						   .distinct()
-						   .filter(list -> {String fname = list.get(1);
-						   return fname.equalsIgnoreCase(list.get(1));})
+						   .filter(list -> {String tyear = list.get(3);
+						   return tyear.equalsIgnoreCase(Integer.toString(year));})
 						   .sorted((n1, n2) -> n1.get(0).compareToIgnoreCase(n2.get(0)))	
-						   .distinct()
 						   .map(list -> {list.toString();
 							String yearMovies = String.format("%s\t%s", list.get(0), list.get(1));
 							return yearMovies;})
 							.collect(Collectors.toList());
 						
 				
-				System.out.println(dMovies);
+				//System.out.println(dMovies);
 
 				return dMovies;
 			}
 			if(!sortByLastname){
 				List<String> dMovies=lines.stream()
 						   .map(line -> Arrays.asList(line.split("\t")))
-						   .distinct()
 						   .filter(list -> {String name=list.get(2); 
 					                  return name.equalsIgnoreCase(movie);})
 						   
-						   .filter(list -> {String fname = list.get(1);
-						   return fname.equalsIgnoreCase(list.get(1));})
+						   .filter(list -> {String tyear = list.get(3);
+						   return tyear.equalsIgnoreCase(Integer.toString(year));})
 						   .sorted((n1, n2) -> n1.get(1).compareToIgnoreCase(n2.get(1)))	
-						   .distinct()
 						   .map(list -> {list.toString();
 							String yearMovies = String.format("%s\t%s", list.get(0), list.get(1));
 							return yearMovies;})
 							.collect(Collectors.toList());
-				System.out.println(dMovies);
+				//System.out.println(dMovies);
 
 				return dMovies;
 			}
@@ -295,21 +277,43 @@ public class IMDBDirectors {
 		List<String> lines;
 
 		try {
-			lines = Files.lines(file, Charset.forName("ISO-8859-1")).collect(Collectors.toList());
 			if(sortByMovie){
-				lines.stream()
-			     .skip(1)
-			     .map(line -> Arrays.asList(line.split("/t")))	
-			     .filter(movie -> {String nmovie=movie.get(1); 
-		                             return (!nmovie.equals("")&& 
-                                 nmovie.equalsIgnoreCase("documentary"));})
-			     .filter(list -> {String tmovie=list.get(2);
-		                            return (!tmovie.equals("")&& 
-                                                 tmovie.equals(list.get(2)));})
-			     .map(list -> {String name=list.get(0); return name;})
-			     .collect(Collectors.toList());
+lines = Files.lines(file, Charset.forName("ISO-8859-1")).collect(Collectors.toList());
+			
+			Map<Object, Long> mdCount = lines.stream().map(line -> Arrays.asList(line.split("\t")))
+					.collect(Collectors.groupingBy(n -> String.format("%s\t%s", n.get(2) ,n.get(3)), Collectors.counting()));
 				
+						    List<String> result = mdCount.entrySet().stream()
+									   .sorted((n1, n2) -> n1.getKey().toString().compareToIgnoreCase(n2.getKey().toString()))	
+
+							            .map(list -> list.getKey().toString().substring(0,list.getKey().toString().indexOf("\t") )+"\t"+ list.getValue().toString())
+							            
+							            .collect(Collectors.toList());
+
+				//System.out.println(result);
+				return result;
 			}
+			if(!sortByMovie){
+				lines = Files.lines(file, Charset.forName("ISO-8859-1")).collect(Collectors.toList());
+							
+							Map<Object, Long> mdCount = lines.stream().map(line -> Arrays.asList(line.split("\t")))
+									.collect(Collectors.groupingBy(n -> String.format("%s\t%s", n.get(2) ,n.get(3)), Collectors.counting()));
+								
+										    List<String> result = mdCount.entrySet().stream()
+
+													   .sorted((n1, n2) -> n1.getKey().toString().compareToIgnoreCase(n2.getKey().toString()))	
+													   .sorted((n1, n2) -> n2.getValue().compareTo(n1.getValue()))	
+
+											            .map(list -> list.getKey().toString().substring(0,list.getKey().toString().indexOf("\t") )
+											            		+"\t"+ list.getValue().toString())
+											            
+											            .collect(Collectors.toList());
+
+								System.out.println(result);
+								return result;
+							}
+			return null;
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

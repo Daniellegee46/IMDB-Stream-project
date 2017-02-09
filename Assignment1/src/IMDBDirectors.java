@@ -1,5 +1,4 @@
 
-//import java.awt.List;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -8,7 +7,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class IMDBDirectors {
@@ -18,7 +16,6 @@ public class IMDBDirectors {
 		try {
 			count = Files.lines(file, Charset.forName("ISO-8859-1")).count();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return count;
@@ -34,7 +31,6 @@ public class IMDBDirectors {
 					.distinct().count();
 			return directors;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return 0;
@@ -199,15 +195,11 @@ public class IMDBDirectors {
 		List<String> lines;
 		try {
 			lines = Files.lines(file, Charset.forName("ISO-8859-1")).collect(Collectors.toList());
-			
 			Map<Object, Long> mdCount = lines.stream().map(line -> Arrays.asList(line.split("\t")))
 					.collect(Collectors.groupingBy(n -> String.format("%s\t%s", n.get(0), n.get(1)), Collectors.counting()));
-				
 						    String result = mdCount.entrySet().stream()
 						             .max(Comparator.comparing(n -> n.getValue()))
 							            .map(list -> list.getKey().toString()+"\t"+ list.getValue().toString()).get();
-
-
 						    List<String> realResult = Arrays.asList(result);
 						    
 						    
@@ -226,7 +218,6 @@ public class IMDBDirectors {
 
 		try {
 			lines = Files.lines(file, Charset.forName("ISO-8859-1")).collect(Collectors.toList());
-			
 			if(sortByLastname){
 
 				List<String> dMovies = lines.stream()
@@ -240,8 +231,6 @@ public class IMDBDirectors {
 							String yearMovies = String.format("%s\t%s", list.get(0), list.get(1));
 							return yearMovies;})
 							.collect(Collectors.toList());
-						
-				
 				//System.out.println(dMovies);
 
 				return dMovies;
@@ -251,7 +240,6 @@ public class IMDBDirectors {
 						   .map(line -> Arrays.asList(line.split("\t")))
 						   .filter(list -> {String name=list.get(2); 
 					                  return name.equalsIgnoreCase(movie);})
-						   
 						   .filter(list -> {String tyear = list.get(3);
 						   return tyear.equalsIgnoreCase(Integer.toString(year));})
 						   .sorted((n1, n2) -> n1.get(1).compareToIgnoreCase(n2.get(1)))	
@@ -268,9 +256,7 @@ public class IMDBDirectors {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
 		return null;
-
 	}
 
 	public static List<String> getNumberOfDirectorsPerMovie(Path file, boolean sortByMovie) {
@@ -285,11 +271,9 @@ lines = Files.lines(file, Charset.forName("ISO-8859-1")).collect(Collectors.toLi
 				
 						    List<String> result = mdCount.entrySet().stream()
 									   .sorted((n1, n2) -> n1.getKey().toString().compareToIgnoreCase(n2.getKey().toString()))	
-
-							            .map(list -> list.getKey().toString().substring(0,list.getKey().toString().indexOf("\t") )+"\t"+ list.getValue().toString())
-							            
+							            .map(list -> list.getKey().toString().substring(0,list.getKey().toString().indexOf("\t") )
+							            		+"\t"+ list.getValue().toString())
 							            .collect(Collectors.toList());
-
 				//System.out.println(result);
 				return result;
 			}
@@ -298,18 +282,14 @@ lines = Files.lines(file, Charset.forName("ISO-8859-1")).collect(Collectors.toLi
 							
 							Map<Object, Long> mdCount = lines.stream().map(line -> Arrays.asList(line.split("\t")))
 									.collect(Collectors.groupingBy(n -> String.format("%s\t%s", n.get(2) ,n.get(3)), Collectors.counting()));
-								
-										    List<String> result = mdCount.entrySet().stream()
-
-													   .sorted((n1, n2) -> n1.getKey().toString().compareToIgnoreCase(n2.getKey().toString()))	
-													   .sorted((n1, n2) -> n2.getValue().compareTo(n1.getValue()))	
-
-											            .map(list -> list.getKey().toString().substring(0,list.getKey().toString().indexOf("\t") )
+										 List<String> result = mdCount.entrySet().stream()
+											.sorted((n1, n2) -> n1.getKey().toString().compareToIgnoreCase(n2.getKey().toString()))	
+											.sorted((n1, n2) -> n2.getValue().compareTo(n1.getValue()))	
+											.map(list -> list.getKey().toString().substring(0,list.getKey().toString().indexOf("\t") )
 											            		+"\t"+ list.getValue().toString())
-											            
-											            .collect(Collectors.toList());
+											.collect(Collectors.toList());
 
-								System.out.println(result);
+								//System.out.println(result);
 								return result;
 							}
 			return null;
@@ -323,22 +303,93 @@ lines = Files.lines(file, Charset.forName("ISO-8859-1")).collect(Collectors.toLi
 	}
 
 	public static List<String> getNumberOfMoviesPerYear(Path file, boolean sortByYear) {
+		List<String> lines;
+
+		try {
+			if(sortByYear){
+				lines = Files.lines(file, Charset.forName("ISO-8859-1")).collect(Collectors.toList());
+			
+				Map<Object, Long> mdCount = lines.stream().map(line -> Arrays.asList(line.split("\t")))
+					.collect(Collectors.groupingBy(n -> String.format("%s\t", n.get(3)), Collectors.counting()));
+				
+						    List<String> result = mdCount.entrySet().stream()
+									   .sorted((n1, n2) -> n1.getKey().toString().compareToIgnoreCase(n2.getKey().toString()))	
+
+							            .map(list -> list.getKey().toString().substring(0,list.getKey().toString().indexOf("\t") )+"\t"+ list.getValue().toString())
+							            
+							            .collect(Collectors.toList());
+
+				//System.out.println(result);
+				return result;
+			}
+			if(!sortByYear){
+				lines = Files.lines(file, Charset.forName("ISO-8859-1")).collect(Collectors.toList());
+			
+				Map<Object, Long> mdCount = lines.stream().map(line -> Arrays.asList(line.split("\t")))
+					.collect(Collectors.groupingBy(n -> String.format("%s\t", n.get(3), n.get(2)), Collectors.counting()));
+				
+						    List<String> result = mdCount.entrySet().stream()
+									   .sorted((n1, n2) -> n1.getKey().toString().compareToIgnoreCase(n2.getKey().toString()))	
+
+									   .sorted((n1, n2) -> n2.getValue().compareTo(n1.getValue()))	
+
+							            .map(list -> list.getKey().toString().substring(0,list.getKey().toString().indexOf("\t") )+"\t"+ list.getValue().toString())
+							            
+							            .collect(Collectors.toList());
+
+				//System.out.println(result);
+				return result;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return null;
 
 	}
 
 	public static List<String> getDirectorsByNumberOfMovies(Path file, boolean sortByName) {
+		List<String> lines;
+
+		try {
+			if(sortByName){
+				lines = Files.lines(file, Charset.forName("ISO-8859-1")).collect(Collectors.toList());
+			
+				Map<Object, Long> mdCount = lines.stream().map(line -> Arrays.asList(line.split("\t")))
+					.collect(Collectors.groupingBy(n -> String.format("%s\t%s", n.get(0), n.get(1)), Collectors.counting()));
+				
+						    List<String> result = mdCount.entrySet().stream()
+									   .sorted((n1, n2) -> n1.getKey().toString().compareToIgnoreCase(n2.getKey().toString()))	
+									   //.sorted((n1, n2) -> n2.getValue().compareTo(n1.getValue()))	
+
+							            .map(list -> list.getKey().toString()+"\t"+ list.getValue().toString())
+							            
+							            .collect(Collectors.toList());
+
+				//System.out.println(result);
+				return result;
+			}
+			if(!sortByName){
+				lines = Files.lines(file, Charset.forName("ISO-8859-1")).collect(Collectors.toList());
+			
+				Map<Object, Long> mdCount = lines.stream().map(line -> Arrays.asList(line.split("\t")))
+					.collect(Collectors.groupingBy(n -> String.format("%s\t%s", n.get(0), n.get(1)), Collectors.counting()));
+				
+						    List<String> result = mdCount.entrySet().stream()
+									   .sorted((n1, n2) -> n1.getKey().toString().compareToIgnoreCase(n2.getKey().toString()))	
+									   .sorted((n1, n2) -> n2.getValue().compareTo(n1.getValue()))	
+
+							            .map(list -> list.getKey().toString()+"\t"+ list.getValue().toString())
+							            
+							            .collect(Collectors.toList());
+
+				//System.out.println(result);
+				return result;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return null;
 
 	}
 
 }
-
-// Print Helper
-//
-//
-// List<String> directorNames = lines.stream()
-// .map(line -> Arrays.asList(line.split("\t")).get(0))
-// .collect(Collectors.toList());
-//
-// System.out.println(directorNames);

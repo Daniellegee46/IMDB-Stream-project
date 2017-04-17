@@ -314,9 +314,8 @@ lines = Files.lines(file, Charset.forName("ISO-8859-1")).collect(Collectors.toLi
 				
 						    List<String> result = mdCount.entrySet().stream()
 									   .sorted((n1, n2) -> n1.getKey().toString().compareToIgnoreCase(n2.getKey().toString()))	
-
-							            .map(list -> list.getKey().toString().substring(0,list.getKey().toString().indexOf("\t") )+"\t"+ list.getValue().toString())
-							            
+							            .map(list -> list.getKey().toString()
+							            .substring(0,list.getKey().toString().indexOf("\t") )+"\t"+ list.getValue().toString())
 							            .collect(Collectors.toList());
 
 				//System.out.println(result);
@@ -359,13 +358,8 @@ lines = Files.lines(file, Charset.forName("ISO-8859-1")).collect(Collectors.toLi
 				
 						    List<String> result = mdCount.entrySet().stream()
 									   .sorted((n1, n2) -> n1.getKey().toString().compareToIgnoreCase(n2.getKey().toString()))	
-									   //.sorted((n1, n2) -> n2.getValue().compareTo(n1.getValue()))	
-
 							            .map(list -> list.getKey().toString()+"\t"+ list.getValue().toString())
-							            
 							            .collect(Collectors.toList());
-
-				//System.out.println(result);
 				return result;
 			}
 			if(!sortByName){
@@ -381,7 +375,6 @@ lines = Files.lines(file, Charset.forName("ISO-8859-1")).collect(Collectors.toLi
 							            .map(list -> list.getKey().toString()+"\t"+ list.getValue().toString())
 							            
 							            .collect(Collectors.toList());
-
 				//System.out.println(result);
 				return result;
 			}
